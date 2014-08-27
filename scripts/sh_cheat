@@ -1,0 +1,4 @@
+# rename files, replacing whitespace with underscore
+# for example, converts "bkM_25C #25.dat" to "bkM_25C.dat" (CD data)
+
+IFS="\n"; for i in *; do mv $i ${i//[[:space:]]/_}; done
