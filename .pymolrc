@@ -1,0 +1,15 @@
+from pymol import cmd
+
+run /Users/koepnick/scripts/javier_pymol_scripts/obj_arrows.py
+run /Users/koepnick/scripts/javier_pymol_scripts/center_of_mass.py
+run /Users/koepnick/scripts/javier_pymol_scripts/Axes.py
+run /Users/koepnick/scripts/pymol/custom.py
+run /Users/koepnick/scripts/pymol/tmalign.py
+
+cmd.set_key( 'CTRL-Z', cmd.zoom, [ "visible" ] )
+set ray_shadow, 0
+bg_color white
+hide all
+show cartoon, all
+show sticks, not (name c or name n)
+remove h.
