@@ -11,5 +11,6 @@ set ray_shadow, 0
 bg_color white
 hide all
 show cartoon, all
+set cartoon_flat_sheets, 0
 show sticks, not (name c or name n)
 remove h.
