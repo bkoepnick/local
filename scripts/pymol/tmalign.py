@@ -58,7 +58,7 @@ ARGUMENTS
 		else:
 			myalign(method)
 
-def tmalign(mobile, target, args='', exe='TMalign', ter=0, transform=1, object=None, quiet=0):
+def tmalign(mobile, target, args='', exe='/usr/local/bin/TMalign', ter=0, transform=1, object=None, quiet=0):
 	'''
 DESCRIPTION
 
