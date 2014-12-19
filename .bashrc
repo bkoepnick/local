@@ -5,16 +5,16 @@ export PS1="[ \d \t \h:\W ] $ "
 export CLICOLOR=1
 #export LSCOLORS=exfxcxdxbxegedabagacad
 
-export HISTSIZE=1000
-export HISTFILESIZE=10000
+export HISTSIZE=10000
+export HISTFILESIZE=100000
 
 export PATH=".:/usr/local/git/:/Users/koepnick/scripts/:$PATH"
 
-alias game_static_sh="/Users/koepnick/rosetta_local/interactive/source/xcode_4/DerivedData/rosetta-interactive/Build/Products/Release/game_static_sh \
+alias game_static_sh="/Users/koepnick/rosetta_local/interactive/source/xcode_6/DerivedData/rosetta-interactive/Build/Products/Release/game_static_sh \
 	-database /Users/koepnick/rosetta_local/interactive/database \
 	-resources /Users/koepnick/rosetta_local/interactive/resources"
 
-alias foldit="/Users/koepnick/rosetta_local/interactive/source/xcode_4/DerivedData/rosetta-interactive/Build/Products/Release/game_static.app/Contents/MacOS/game_static \
+alias foldit="/Users/koepnick/rosetta_local/interactive/source/xcode_6/DerivedData/rosetta-interactive/Build/Products/Release/game_static.app/Contents/MacOS/game_static \
 	-interactive_game novice \
 	-dont_update -dont_quickstart \
 	-resources resources -database database"
@@ -31,6 +31,8 @@ alias mame="$MAMEPATH/mame64 \
 	-state_directory $MAMEPATH/sta \
 	-autosave"
 
+alias joinpdf="/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py"
+
 export PYTHONPATH=".:/usr/lib:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/:/Users/koepnick/rosetta_local/lib/:/Users/koepnick/scripts/javier_pymol_scripts/:$PYTHONPATH"
 
 export ROSETTA_INTERACTIVE_PATH="/Users/koepnick/rosetta_local/interactive/"
@@ -41,7 +43,7 @@ function title() {
 
 function newdir() {
 	DIR=$1; 
-	mkdir ${DIR}; cd ${DIR};
+	mkdir ${DIR} && cd ${DIR};
 }
 
 function fetch_pdb() {
