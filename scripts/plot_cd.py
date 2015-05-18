@@ -22,6 +22,8 @@ import matplotlib.pyplot as plt
 parser = argparse.ArgumentParser(description='')
 parser.add_argument( '-wave', type=str, nargs='*', help='wavelength scan input files' )
 parser.add_argument( '-melt', type=str, nargs='*', help='melting curve input files' )
+parser.add_argument( '-gdn', type=str, nargs='*', help='guanidine titration input files' )
+parser.add_argument( '-urea', type=str, nargs='*', help='urea titration input files' )
 parser.add_argument( '-title', type=str, help='title of plot' )
 parser.add_argument( '-key', type=str, default='CD_Signal', help='value to plot on y-axis' )
 parser.add_argument( '-out', type=str, default='out.png', help='name of output file' )
@@ -30,8 +32,8 @@ parser.add_argument( '-average', action='store_true', help='average multiple dat
 parser.add_argument( '-jasco', action='store_true', help='input files are JASCO .txt format' )
 args = parser.parse_args()
 
-if not args.wave and not args.melt:
-	print "Must provide -wave or -melt arguments"
+if not args.wave and not args.melt and not args.gdn and not args.urea:
+	print "Must provide -wave, -melt, -gdn, or -urea arguments"
 	exit(1)
 
 COLOR = [ "b", "r", "g", "c", "m", "y", "k" ]
@@ -88,7 +90,7 @@ def parse_aviv_file( flines ):
 			index = line.strip().split().index( args.key )
 		
 			for k, record in enumerate( flines[j+1:] ):	
-				# when we encounter escape sequence, add information to data[]
+				# when we encounter escape sequence or run out of lines, add information to data[]
 				# recursive call to collect additional datasets
 				if re.compile( '\$' ).match( record ):
 					data.append( (data_x, data_y) )
@@ -99,6 +101,7 @@ def parse_aviv_file( flines ):
 				if fields:
 					data_x.append( float( fields[0] ) )
 					data_y.append( float( fields[ index ] ) )
+			data.append( (data_x, data_y) )
 			break
 	return data
 
@@ -132,7 +135,7 @@ def plot_waves( waves, plot ):
 		f = open( fname, 'r' )
 		flines = f.readlines()
 		f.close()
-		label = os.path.splitext( fname )[0].split('_')[2]	
+		label = os.path.splitext( fname )[0].split('_')[-1]	
 
 		datasets = parse_file( flines )
 		if args.average:
@@ -163,7 +166,23 @@ def plot_melts( melts, plot ):
 	plot.set_ylabel( 'Ellipticity at 220nm (mdeg)' )
 	plot.set_ylim( top=0 )
 
+# plot titration curve
+def plot_titration( titrations, plot ):
+	for i, fname in enumerate( titrations ):
+		f = open( fname, 'r' )
+		flines = f.readlines()
+		f.close()
+
+		x, y = parse_file( flines )[0]
+
+		#plot.plot( x, y, color=COLOR[i%len( COLOR )] )
+		plot.plot( x, y, color=COLOR[i%len( COLOR )], linestyle='None', marker='o') # plot only points
+
+	plot.set_ylabel( 'Ellipticity at 220nm (mdeg)' )
+	plot.set_ylim( plot.get_ylim()[0]*1.10, 0 )
+
 fig = plt.figure()
+
 if args.wave and args.melt:
 	wave = plt.subplot2grid((2,1), (0,0))
 	melt = plt.subplot2grid((2,1), (1,0))
@@ -177,6 +196,14 @@ elif args.wave:
 elif args.melt:
 	melt = plt.subplot(111)
 	plot_melts( args.melt, melt )
+elif args.gdn:
+	titration = plt.subplot(111)
+	plot_titration( args.gdn, titration )
+	titration.set_xlabel( '[GdnHCl] (M)' )
+elif args.urea:
+	titration = plt.subplot(111)
+	plot_titration( args.urea, titration )
+	titration.set_xlabel( '[Urea] (M)' )
 
 if args.title:
 	fig.suptitle( args.title )
