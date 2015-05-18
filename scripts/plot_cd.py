@@ -23,6 +23,7 @@ parser = argparse.ArgumentParser(description='')
 parser.add_argument( '-wave', type=str, nargs='*', help='wavelength scan input files' )
 parser.add_argument( '-melt', type=str, nargs='*', help='melting curve input files' )
 parser.add_argument( '-gdn', type=str, nargs='*', help='guanidine titration input files' )
+parser.add_argument( '-urea', type=str, nargs='*', help='urea titration input files' )
 parser.add_argument( '-title', type=str, help='title of plot' )
 parser.add_argument( '-key', type=str, default='CD_Signal', help='value to plot on y-axis' )
 parser.add_argument( '-out', type=str, default='out.png', help='name of output file' )
@@ -31,8 +32,8 @@ parser.add_argument( '-average', action='store_true', help='average multiple dat
 parser.add_argument( '-jasco', action='store_true', help='input files are JASCO .txt format' )
 args = parser.parse_args()
 
-if not args.wave and not args.melt and not args.gdn:
-	print "Must provide -wave, -melt, or -gdn arguments"
+if not args.wave and not args.melt and not args.gdn and not args.urea:
+	print "Must provide -wave, -melt, -gdn, or -urea arguments"
 	exit(1)
 
 COLOR = [ "b", "r", "g", "c", "m", "y", "k" ]
@@ -177,7 +178,6 @@ def plot_titration( titrations, plot ):
 		#plot.plot( x, y, color=COLOR[i%len( COLOR )] )
 		plot.plot( x, y, color=COLOR[i%len( COLOR )], linestyle='None', marker='o') # plot only points
 
-	plot.set_xlabel( '[GdnHCl] (M)' )
 	plot.set_ylabel( 'Ellipticity at 220nm (mdeg)' )
 	plot.set_ylim( plot.get_ylim()[0]*1.10, 0 )
 
@@ -199,6 +199,11 @@ elif args.melt:
 elif args.gdn:
 	titration = plt.subplot(111)
 	plot_titration( args.gdn, titration )
+	titration.set_xlabel( '[GdnHCl] (M)' )
+elif args.urea:
+	titration = plt.subplot(111)
+	plot_titration( args.urea, titration )
+	titration.set_xlabel( '[Urea] (M)' )
 
 if args.title:
 	fig.suptitle( args.title )

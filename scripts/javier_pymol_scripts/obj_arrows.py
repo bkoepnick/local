@@ -7,7 +7,6 @@ def move_down( orient=True ):
     def move( ):
         enabled_objs = filter(lambda x: not is_axis.match(x), cmd.get_names("objects",enabled_only=1))
         all_objs = filter(lambda x: not is_axis.match(x), cmd.get_names("objects",enabled_only=0))
-        has_enabled_axis = False;
         for n in cmd.get_names("objects",enabled_only=1):
             if is_axis.match( n ):
                 has_enable_axis = True
@@ -21,10 +20,9 @@ def move_down( orient=True ):
                         cmd.enable( all_objs[0] )
                     else:
                         cmd.enable( all_objs[i+1] )
-        if not has_enabled_axis:
-            if(orient):
-                cmd.zoom('visible')
-                cmd.orient()
+		if(orient):
+			cmd.zoom('visible')
+			cmd.orient()
         cmd.zoom('visible')
     return move
 
@@ -41,17 +39,18 @@ def move_up( orient=True):
                         cmd.enable( all_objs[-1] )
                     else:
                         cmd.enable( all_objs[i-1] )
-        if not has_enabled_axis:
-            if(orient):
-                cmd.zoom('visible')
-                cmd.orient()
+		if(orient):
+			cmd.zoom('visible')
+			cmd.orient()
         cmd.zoom('visible')
     return move
 
 cmd.set_key('pgup', move_up() )
 cmd.set_key('pgdn', move_down() )
-cmd.set_key('CTRL-pgup', move_up(0) )
-cmd.set_key('CTRL-pgdn', move_down(0) )
+cmd.set_key('left', move_up(0) )
+cmd.set_key('right', move_down(0) )
+#cmd.set_key('CTRL-pgup', move_up(0) )
+#cmd.set_key('CTRL-pgdn', move_down(0) )
 #cmd.set_key('up', move_up)
 #cmd.set_key('down', move_down)
 #cmd.set_key('left', move_up)
