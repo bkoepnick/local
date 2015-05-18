@@ -53,3 +53,28 @@ def rainbow():
 	for i in cmd.get_object_list():
 		to_color = i + ' and e. c'
 		cmd.spectrum( 'count', 'rainbow', to_color )
+
+'''
+DESCRIPTION: Pairwise TMalign of every two structures
+USAGE
+tmalign_pairs
+'''
+def tmalign_pairs():
+	all_pdbs = cmd.get_names( 'all' )
+
+	pdb_pairs = []
+	while ( len( all_pdbs ) > 1 ):
+		pdb_pairs.append( all_pdbs[:2] )
+		all_pdbs = all_pdbs[2:]
+
+	for pdb_pair in pdb_pairs:
+		tmalign( pdb_pair[0], pdb_pair[1] )
+		cmd.spectrum( 'count', 'rainbow', pdb_pair[0] + ' and e. c' )
+		cmd.color( 'white', pdb_pair[1] )
+	
+		cmd.create( pdb_pair[0] + '/' + pdb_pair[1], pdb_pair[0], 0, 1 )
+		cmd.create( pdb_pair[0] + '/' + pdb_pair[1], pdb_pair[1], 0, 2 )
+		cmd.delete( pdb_pair[0] )
+		cmd.delete( pdb_pair[1] )
+
+	cmd.set( 'all_states', 1 )
